@@ -2,6 +2,7 @@ package org.magnum.mobilecloud.video;
 
 
 import com.google.gson.Gson;
+import org.magnum.mobilecloud.video.client.VideoSvcApi;
 import org.magnum.mobilecloud.video.repository.Video;
 import org.magnum.mobilecloud.video.repository.VideoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class VideoController {
     private VideoRepo videoRepo;
 
 
-    @RequestMapping(value="/video", method = RequestMethod.GET)
+    @RequestMapping(value=VideoSvcApi.VIDEO_SVC_PATH, method = RequestMethod.GET)
     public @ResponseBody Collection<Video> getVideoList(){
         List<Video> videos = new ArrayList<>();
         for (Video v : videoRepo.findAll())
@@ -41,7 +42,7 @@ public class VideoController {
         return videoRepo.save(v);
     }
 
-    @RequestMapping(value="/video/{id}", method = RequestMethod.GET)
+    @RequestMapping(value=VideoSvcApi.VIDEO_SVC_PATH + "/{id}", method = RequestMethod.GET)
     public @ResponseBody ResponseEntity<Video> getVideoById(
             @PathVariable long id) {
         Video v = videoRepo.findOne(id);
@@ -52,7 +53,7 @@ public class VideoController {
     }
 
 
-    @RequestMapping(value="/video/{id}/like", method = RequestMethod.POST)
+    @RequestMapping(value=VideoSvcApi.VIDEO_SVC_PATH + "/{id}/like", method = RequestMethod.POST)
     public @ResponseBody ResponseEntity<String>  likeVideo(@PathVariable long id,  Principal p){
         Video v = videoRepo.findOne(id);
         String userId = p.getName();
@@ -71,7 +72,7 @@ public class VideoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/video/{id}/unlike", method = RequestMethod.POST)
+    @RequestMapping(value=VideoSvcApi.VIDEO_SVC_PATH + "/{id}/unlike", method = RequestMethod.POST)
     public @ResponseBody ResponseEntity<String>  unlikeVideo(@PathVariable long id,  Principal p){
         Video v = videoRepo.findOne(id);
         String userId = p.getName();
