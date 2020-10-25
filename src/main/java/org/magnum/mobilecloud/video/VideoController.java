@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 
+import static org.magnum.mobilecloud.video.client.VideoSvcApi.VIDEO_DURATION_SEARCH_PATH;
+import static org.magnum.mobilecloud.video.client.VideoSvcApi.VIDEO_TITLE_SEARCH_PATH;
+
 
 @Controller
 public class VideoController {
@@ -91,13 +94,13 @@ public class VideoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value=VideoSvcApi.VIDEO_SVC_PATH + "/search/findByName?title={title}", method = RequestMethod.GET)
+    @RequestMapping(value=VIDEO_TITLE_SEARCH_PATH, method = RequestMethod.GET)
     public @ResponseBody Collection<Video> findByTitle(@RequestParam("title") String title) {
         return videoRepo.findByName(title);
 
     }
 
-    @RequestMapping(value = VideoSvcApi.VIDEO_SVC_PATH + "/search/findByDurationLessThan?duration={duration}", method = RequestMethod.GET)
+    @RequestMapping(value = VIDEO_DURATION_SEARCH_PATH, method = RequestMethod.GET)
     public @ResponseBody Collection<Video> findByDurationLessThan(@RequestParam("duration") long duration) {
         return videoRepo.findByDurationLessThan(duration);
     }
