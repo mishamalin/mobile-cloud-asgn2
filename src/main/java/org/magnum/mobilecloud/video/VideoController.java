@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import retrofit.http.*;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +26,7 @@ public class VideoController {
 
 
     @RequestMapping(value="/video", method = RequestMethod.GET)
-    public @ResponseBody Collection<Video> getVideo(){
+    public @ResponseBody Collection<Video> getVideoList(){
         List<Video> videos = new ArrayList<>();
         for (Video v : videoRepo.findAll())
             videos.add(v);
@@ -33,24 +34,17 @@ public class VideoController {
     }
 
     @RequestMapping(value="/video", method = RequestMethod.POST)
-    public @ResponseBody Video setVideo(@RequestBody Video v){
+    public @ResponseBody Video addVideo(@RequestBody Video v){
         return videoRepo.save(v);
     }
 
-    @RequestMapping(value="/video/{id}/data", method = RequestMethod.POST)
-    public @ResponseBody ResponseEntity setVideoData(
-            @PathVariable long id, @RequestParam("data") MultipartFile videoData) throws IOException {
+    @RequestMapping(value="/video/{id}", method = RequestMethod.GET)
+    public @ResponseBody ResponseEntity<Video> getVideoById(
+            @PathVariable long id) throws IOException {
+        Video v = videoRepo.findOne(id);
+        if (v != null)
+            return new ResponseEntity<>(v, HttpStatus.OK);
 
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-
-
-    @RequestMapping(value="/video/{id}/data", method = RequestMethod.GET)
-    public @ResponseBody ResponseEntity getVideoData(
-            @PathVariable long id, HttpServletResponse response) throws IOException {
-
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
-    }
-
-
 }
