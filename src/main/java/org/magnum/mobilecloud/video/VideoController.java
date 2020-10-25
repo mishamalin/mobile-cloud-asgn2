@@ -71,4 +71,23 @@ public class VideoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value="/video/{id}/unlike", method = RequestMethod.POST)
+    public @ResponseBody ResponseEntity<String>  unlikeVideo(@PathVariable long id,  Principal p){
+        Video v = videoRepo.findOne(id);
+        String userId = p.getName();
+
+        if (v == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Set<String> likedBy = v.getLikedBy();
+        if (!likedBy.contains(userId)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        v.setLikes(v.getLikes() - 1);
+        likedBy.remove(userId);
+        videoRepo.save(v);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
